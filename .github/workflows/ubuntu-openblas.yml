@@ -18,24 +18,6 @@ env:
   GCE_CLI_GHA_VERSION: '416.0.0'      # Fixed to avoid dependency on API changes
 
 jobs:
-  openblas-amd64:
-    permissions:
-      contents: read
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
-      - name: Maximize build space
-        run: |
-          source util/ci_utils.sh
-          maximize_ubuntu_github_actions_build_space
-      - name: Docker build
-        run: docker/docker_build.sh openblas-amd64-py312-dev
-
-      - name: Docker test
-        run: docker/docker_test.sh openblas-amd64-py312-dev
 
   openblas-arm64:
     permissions:
@@ -44,7 +26,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python_version: ['3.10', '3.11', '3.12', '3.13']
+        python_version: ['3.12']
         is_main:
           - ${{ github.ref == 'refs/heads/main' }}
         exclude:

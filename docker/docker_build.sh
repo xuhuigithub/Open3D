@@ -149,6 +149,10 @@ openblas_export_env() {
 
 openblas_build() {
     openblas_print_env
+     docker login -u xuhuidockerhub -p ${DOCKER_PASS}
+     docker pull nginx
+     docker tag nginx xuhuidockerhub/open3d:test
+     docker push xuhuidockerhub/open3d:test
 
     pushd "${HOST_OPEN3D_ROOT}"
     docker build \
@@ -159,6 +163,8 @@ openblas_build() {
         -t "${DOCKER_TAG}" \
         -f docker/Dockerfile.openblas .
     popd
+    docker tag ${DOCKER_TAG} xuhuidockerhub/open3d:312
+    docker push xuhuidockerhub/open3d:312
 
     docker run -v "${PWD}:/opt/mount" --rm "${DOCKER_TAG}" \
         bash -c "cp /*.whl /opt/mount \
